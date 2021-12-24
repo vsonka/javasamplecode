@@ -1,28 +1,50 @@
 pipeline {
     agent any
-    tools {
-        maven 'Maven 3.3.9'
-        jdk 'jdk8'
-    }
+  tools
+   {
+    maven 'M2_HOME'
+   }
     stages {
-        stage ('Initialize') {
-            steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                '''
-            }
-        }
+	
+		stage('Checkout') 
+		{
+			steps 
+			{
+				git branch: 'main',
+				credentialsId: '35798b44-1c58-4e53-aafd-318249a588cb',
+				url: 'https://github.com/vsonka/javasamplecode.git'
+			}
+		}
+		stage('Build')
+		{
+			steps
+			{
+				script
+				{
+					bat 'mvn  compile'
+				}
+			}
+		}
+		stage('Test')
+		{
+			steps
+			{
+				script
+				{
+					bat 'mvn test'
+				}
+			}
+		}
+		stage('Package')
+		{
+			steps
+			{
+				script
+				{
+					bat 'mvn package '
+				}
+			}
+		}
 
-        stage ('Build') {
-            steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true install' 
-            }
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml' 
-                }
-            }
-        }
     }
 }
