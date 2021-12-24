@@ -26,7 +26,7 @@ public class AppTest
     //the anticipated output or not
     public void testMultiplication() {  
         int result = app.multiply(10, 5);
-        assertEquals(result,50);
+        assertEquals(result,60);
         }
 
     @Test               //write this annotation for each test case
